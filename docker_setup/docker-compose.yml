@@ -39,6 +39,19 @@ services:
     environment:
       - PREFECT_API_URL=http://server:4200/api
 
+  worker:
+    container_name: prefect_worker
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    entrypoint: ["/opt/prefect/start-worker.sh"]
+    environment:
+      - PREFECT_API_URL=http://server:4200/api
+    depends_on:
+      - server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
 networks:
   default:
     name: prefect-dbt-network

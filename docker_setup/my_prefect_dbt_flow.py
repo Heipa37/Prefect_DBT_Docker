@@ -1,21 +1,15 @@
-from pathlib import Path
+from prefect import flow
 
-from prefect_dbt_flow import dbt_flow
-from prefect_dbt_flow.dbt import DbtDagOptions, DbtProfile, DbtProject
 
-my_dbt_flow = dbt_flow(
-    project=DbtProject(
-        name="example_jaffle_shop",
-        project_dir=Path(__file__).parent,
-        profiles_dir=Path(__file__).parent,
-    ),
-    profile=DbtProfile(
-        target="dev",
-    ),
-    dag_options=DbtDagOptions(
-        run_test_after_model=True,
-    ),
-)
+@flow(log_prints=True)
+def my_flow(name: str = "world"):
+    print(f"Hello, {name}!")
+
 
 if __name__ == "__main__":
-    my_dbt_flow()
+    my_flow.deploy(
+        name="my-deployment",
+        work_pool_name="general-work-pool",
+        image="bt_cli",
+        push=False # switch to True to push to your image registry
+    )

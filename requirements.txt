@@ -89,6 +89,7 @@ pexpect==4.9.0
 platformdirs==4.3.6
 prefect==3.4.6
 prefect-dbt==0.6.7
+prefect-docker==0.6.6
 prefect-redis==0.2.2
 prefect-shell==0.3.1
 prometheus_client==0.21.1
