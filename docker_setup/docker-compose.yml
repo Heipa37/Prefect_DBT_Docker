@@ -1,7 +1,8 @@
-version: "3.1"
+name: DABI_2025
 
 services:
   data-db:
+    container_name: dabi_postgres
     image: postgres:15.2-alpine
     restart: always
     environment:
@@ -12,20 +13,22 @@ services:
       - 5432
 
   server:
+    container_name: prefect_server
     build:
       context: .
       dockerfile: ./Dockerfile
     restart: always
     entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
     environment:
-      - PREFECT_UI_URL=http://127.0.0.1:4200/api
-      - PREFECT_API_URL=http://127.0.0.1:4200/api
+      - PREFECT_UI_URL=http://127.0.0.1:4200/api #changed from 127.0.0.0:4200/api so dashboard works
+      - PREFECT_API_URL=http://127.0.0.1:4200/api 
       - PREFECT_SERVER_API_HOST=0.0.0.0
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://admin:pass123@data-db:5432/data
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://admin:pass123@data-db:5432/data #changed from 'sqlite+aiosqlite:////opt/prefect/prefect.db' so dashboard works
     ports:
       - 4200:4200
 
   cli:
+    container_name: dbt_cli
     build:
       context: .
       dockerfile: ./Dockerfile

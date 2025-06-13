@@ -1,2 +1,2 @@
-dbt-postgres==1.6.5
+dbt-postgres==1.9.0
 prefect-dbt-flow
