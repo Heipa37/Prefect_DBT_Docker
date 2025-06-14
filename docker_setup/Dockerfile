@@ -6,8 +6,8 @@ WORKDIR /root/flows
 RUN apt-get update && apt-get install -y curl docker.io
 
 # Copy requirements and install them.
-COPY ./requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt --no-cache-dir
+COPY ./requirements_worker.txt ./requirements_worker.txt
+RUN pip install -r requirements_worker.txt --no-cache-dir
 
 
 # Copy scripts to the image.

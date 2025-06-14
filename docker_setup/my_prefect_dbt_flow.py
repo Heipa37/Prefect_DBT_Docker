@@ -11,5 +11,6 @@ if __name__ == "__main__":
         name="my-deployment",
         work_pool_name="general-work-pool",
         image="bt_cli",
-        push=False # switch to True to push to your image registry
+        push=False,# switch to True to push to your image registry
+        build=False
     )
