@@ -1,4 +1,4 @@
-example_jaffle_shop:
+dabi_2025:
   target: dev
   outputs:
     dev:

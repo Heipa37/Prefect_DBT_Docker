@@ -1,9 +1,9 @@
-name: "example_jaffle_shop"
+name: "dabi_2025"
 
 config-version: 2
 version: "0.1"
 
-profile: "example_jaffle_shop"
+profile: "dabi_2025"
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
@@ -20,7 +20,7 @@ clean-targets:
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
-  example_jaffle_shop:
+  dabi_2025:
     materialized: table
     staging:
       materialized: view

@@ -13,6 +13,21 @@ __pycache__
 ######################
 *venv*
 
+# Python #
+######################
+__pycache__/
+*.pyc
+*.pyo
+
 # Personal testfiles
 ######################
 HEI*
+
+# dbt/prefect #
+######################
+target/
+dbt_modules/
+logs/
+.user.yml
+.dbt/
+.prefect/
