@@ -3,7 +3,7 @@ dabi_2025:
   outputs:
     dev:
       type: postgres
-      host: data-db
+      host: "{{ env_var('DBT_PG_HOST', 'localhost') }}"
       user: admin
       password: pass123
       port: 5432

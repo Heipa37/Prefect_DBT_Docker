@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=data
     expose:
       - 5432
+    ports:
+      - 5432:5432
 
   server:
     container_name: prefect_server
@@ -26,6 +28,7 @@ services:
       - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://admin:pass123@data-db:5432/data #changed from 'sqlite+aiosqlite:////opt/prefect/prefect.db' so dashboard works
     ports:
       - 4200:4200
+    
 
   cli:
     container_name: dbt_cli
@@ -38,6 +41,9 @@ services:
       - ".:/root/flows"
     environment:
       - PREFECT_API_URL=http://server:4200/api
+      - DBT_PG_HOST=data-db
+    tty: true
+    stdin_open: true
 
   worker:
     container_name: prefect_worker
@@ -47,10 +53,32 @@ services:
     entrypoint: ["/opt/prefect/start-worker.sh"]
     environment:
       - PREFECT_API_URL=http://server:4200/api
+      - DBT_PG_HOST=data-db
     depends_on:
       - server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  dbt-init:
+    image: dabi_2025-cli:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - data-db
+    entrypoint: >
+      bash -c "
+        until pg_isready -h data-db -p 5432 -U admin; do
+          echo 'Waiting for Postgres...';
+          sleep 2;
+        done;
+        dbt run-operation setup_db --profiles-dir . --project-dir .
+      "
+    environment:
+      - DBT_PG_HOST=data-db
+      - PGPASSWORD=pass123
+    volumes:
+      - .:/root/flows
 
 networks:
   default:

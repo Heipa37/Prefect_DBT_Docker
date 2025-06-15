@@ -12,6 +12,13 @@
 - dashboard available with
 http://localhost:4200/dashboard
 
+when run python scripts from vs code:
+>>> export PREFECT_API_URL=http://localhost:4200/api
+- deploy flow
+>>> python <python_filename_with_flow.py>
+- scedule a deployment
+>>>
+
 
 ### Problem solving
 - Set profiles.yml to local project:
