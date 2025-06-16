@@ -2,7 +2,7 @@ import os
 os.environ["PREFECT_API_URL"] = "http://localhost:4200/api"
 
 from prefect import flow, task
-from prefect.client import get_client
+from prefect.client.orchestration import get_client
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine, text
@@ -83,6 +83,28 @@ def main_flow()-> None:
     """Orders from todays orders are collected and written to the database."""
     table_orders, table_order_products = load_data()
     write_tables(table_orders, table_order_products)
+    asyncio.run(trigger_process_orders_flow())
+
+
+from prefect.client.orchestration import get_client
+import asyncio
+
+async def trigger_process_orders_flow():
+    async with get_client() as client:
+        # Get the deployment object by full name
+        deployments = await client.read_deployments()
+        print('\n')
+        print(deployments)
+        for d in deployments:
+            if d.name == 'process-orders-deployment':
+                d_id= d.id
+        print('\n')
+        print(d_id)
+        deployment = await client.read_deployment(d_id)
+        
+        # Trigger the flow run using deployment_id
+        flow_run = await client.create_flow_run_from_deployment(deployment_id=deployment.id)
+        print(f"Triggered flow run: {flow_run.id}")
 
 if __name__ == "__main__":
     main_flow()

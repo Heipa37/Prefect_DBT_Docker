@@ -1,5 +1,6 @@
 name: DABI_2025
 
+
 services:
   data-db:
     container_name: dabi_postgres
@@ -13,6 +14,8 @@ services:
       - 5432
     ports:
       - 5432:5432
+    networks:
+      - default
 
   server:
     container_name: prefect_server
@@ -28,6 +31,8 @@ services:
       - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://admin:pass123@data-db:5432/data #changed from 'sqlite+aiosqlite:////opt/prefect/prefect.db' so dashboard works
     ports:
       - 4200:4200
+    networks:
+      - default
     
 
   cli:
@@ -44,6 +49,8 @@ services:
       - DBT_PG_HOST=data-db
     tty: true
     stdin_open: true
+    networks:
+      - default
 
   worker:
     container_name: prefect_worker
@@ -58,6 +65,8 @@ services:
       - server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
 
   dbt-init:
     image: dabi_2025-cli:latest
@@ -80,7 +89,10 @@ services:
     volumes:
       - .:/root/flows
     restart: "no"
+    networks:
+      - default
 
 networks:
   default:
     name: prefect-dbt-network
+    driver: bridge

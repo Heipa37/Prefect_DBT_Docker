@@ -13,6 +13,7 @@ RUN pip install -r requirements_worker.txt --no-cache-dir
 # Copy scripts to the image.
 COPY ./start-worker.sh /opt/prefect/start-worker.sh
 COPY macros macros
+COPY models models
 
 # Run scrips. Make sure the script is executable.
 RUN chmod +x /opt/prefect/start-worker.sh
