@@ -79,6 +79,7 @@ services:
       - PGPASSWORD=pass123
     volumes:
       - .:/root/flows
+    restart: "no"
 
 networks:
   default:

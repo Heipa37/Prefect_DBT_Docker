@@ -11,13 +11,21 @@ __pycache__
 
 # Virtual environment #
 ######################
-*venv*
+.python-version
+.env
+.venv
+env/
+venv/
 
 # Python #
 ######################
 __pycache__/
 *.pyc
 *.pyo
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
 
 # Personal testfiles
 ######################
@@ -31,3 +39,21 @@ logs/
 .user.yml
 .dbt/
 .prefect/
+.prefectignore
+
+# Type checking artifacts
+######################
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Editors
+######################
+.idea/
+.vscode/
+
+# VCS
+######################
+.git/
+.hg/
