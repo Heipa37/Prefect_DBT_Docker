@@ -14,9 +14,12 @@ RUN pip install -r requirements_worker.txt --no-cache-dir
 COPY ./start-worker.sh /opt/prefect/start-worker.sh
 COPY macros macros
 COPY models models
+COPY flows flows
 
 # Run scrips. Make sure the script is executable.
 RUN chmod +x /opt/prefect/start-worker.sh
+
+ENV PREFECT_API_URL="http://server:4200/api"
 
 # Default command (can be overridden by docker-compose)
 CMD ["/bin/bash"]

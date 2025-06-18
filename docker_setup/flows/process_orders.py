@@ -1,4 +1,7 @@
 import os
+
+import prefect.types
+import prefect.types.entrypoint
 os.environ["PREFECT_API_URL"] = "http://localhost:4200/api"
 
 from prefect import flow, task
@@ -6,7 +9,8 @@ from prefect.client import get_client
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine, text
-
+from prefect.docker import DockerImage
+from pathlib import Path
 
 @task(log_prints=True)
 def choose_driver(order_id):
@@ -26,7 +30,7 @@ def choose_driver(order_id):
                      {"driver_id": driver_id, "order_id": order_id})
         conn.commit()
 
-@flow(log_prints=True)
+@task(log_prints=True)
 def search_for_unassigned_orders():
     """
     """
@@ -52,8 +56,26 @@ if __name__ == "__main__":
     process_orders.deploy(
         name="process-orders-deployment",
         work_pool_name="general-work-pool",
-        image="dabi_2025-cli:latest",
+        image="localhost:6500/dabi_2025-worker:latest",
         push=True,
         build=False
     )
 
+#from_source(
+#        source="flows",
+#        entrypoint="process_orders.py:process_orders",
+#    ).
+
+#if __name__ == "__main__":
+#    process_orders.deploy(
+#        name="process-orders-deployment",
+#        work_pool_name="general-work-pool",
+#        image=DockerImage(
+#            name="dabi_2025-cli",
+#            tag='v1.0',
+#            dockerfile="./Dockerfile",
+#            rm=True
+#        ),
+#        push=False,
+#        build=False
+#    )

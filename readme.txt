@@ -11,8 +11,16 @@ https://ilias.h-ka.de/ilias.php?baseClass=ilLinkResourceHandlerGUI&ref_id=976747
 - build docker container (bash or use vs code extentions)
 >>> docker compose -f 'docker_setup/docker-compose.yml' up -d --build 
 
+- tag images (registry):
+>>>  
+
 - dashboard available with
 http://localhost:4200/dashboard
+-> workpool -> general-work-pool  edit
+- copy into 'Networks (Optional)'
+["prefect-dbt-network"]
+and save
+
 
 when run python flows from vs code:
 >>> export PREFECT_API_URL=http://localhost:4200/api

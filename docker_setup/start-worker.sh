@@ -17,4 +17,4 @@ fi
 
 # Start a worker for the pool
 echo "Starting Prefect worker for 'general-work-pool'..."
-prefect worker start --pool general-work-pool --name one_for_all
+prefect worker start --pool general-work-pool --name one_for_all --type "docker"

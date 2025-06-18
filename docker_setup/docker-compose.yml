@@ -24,6 +24,8 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - PREFECT_UI_URL=http://127.0.0.1:4200/api #changed from 127.0.0.0:4200/api so dashboard works
       - PREFECT_API_URL=http://127.0.0.1:4200/api 
@@ -33,6 +35,7 @@ services:
       - 4200:4200
     networks:
       - default
+
     
 
   cli:
@@ -44,6 +47,7 @@ services:
     working_dir: "/root/flows"
     volumes:
       - ".:/root/flows"
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - PREFECT_API_URL=http://server:4200/api
       - DBT_PG_HOST=data-db
@@ -91,6 +95,16 @@ services:
     restart: "no"
     networks:
       - default
+
+  registry:
+    image: registry:2
+    container_name: dabi_docker_registry
+    ports:
+      - "6500:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./registry-data:/data
 
 networks:
   default:
